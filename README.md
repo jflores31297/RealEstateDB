@@ -1,9 +1,3 @@
-# RealEstateDB
-
-Here’s the generated README.md file for your Real Estate Property Management CLI:
-
-📄 README.md
-
 # 🏠 Real Estate Property Management CLI
 
 ## 📌 Project Overview
