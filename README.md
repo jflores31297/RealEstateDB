@@ -88,7 +88,7 @@ The database consists of nine tables, each serving a specific role in property m
 
 ## Installation & Setup
 
-### 4.1 Prerequisites
+### 1.) Prerequisites
 Before setting up the Real Estate Property Management CRUD Application, ensure that your system meets the following requirements:
 
 1. Software Requirements
@@ -105,7 +105,7 @@ Ensure the following Python packages are installed:
 	- datetime – (Built-in) For managing timestamps.
 	- os – (Built-in) For fetching environment variables.
 
-### 4.2 Database Setup
+### 2.) Database Setup
 
 Run the SQL Script:
 1. Locate the provided SQL file (e.g., Deliverable_2.sql).
@@ -114,7 +114,7 @@ Run the SQL Script:
 Verify Database:
 - Confirm that the tables have been created with the expected columns and relationships.
 
-### 4.3 Configure Database Credentials
+### 3.) Configure Database Credentials
 Set up the following environment variables to enable the CLI to connect to the database:
 - DB_HOST (default: localhost)
 - DB_USER (default: root)
@@ -122,7 +122,7 @@ Set up the following environment variables to enable the CLI to connect to the d
 - DB_NAME (default: RealEstateDB)
 
 
-### 4.4 Installing Dependencies
+### 4.) Installing Dependencies
 
 Use pip to install the required dependencies:
 
@@ -130,7 +130,7 @@ pip install mysql-connector-python tabulate
 
 ## Usage
 
-### 5.1 Running the CLI
+### 1.) Running the CLI
 
 Start the Application:
 
@@ -144,7 +144,7 @@ User Prompts:
 
 The CLI will prompt you for input to perform various actions, such as adding a property or updating an owner.
 
-### 5.2 Commands / Operations
+### 2.) Commands / Operations
 
 Property Operations:
 - Create: Enter property details such as address, city, state, zip code, and property type. Optional fields include square feet, year built, purchase date, and purchase price.
@@ -158,7 +158,7 @@ Owner Operations:
 - Update: Select an owner by ID, choose fields to update, and provide new values.
 - Delete: Remove an owner record after confirming that no properties are associated with the owner.
 
-### 5.3 Example Walkthrough
+### 3.) Example Walkthrough
 
 Adding a Property:
 1. Launch the CLI.
@@ -174,14 +174,14 @@ Deleting a Property/Owner:
 
 ## Logging and Troubleshooting
 
-### 7.1 Logging:
+### 1.) Logging:
 - All errors are logged to database.log.
 
-### 7.2 Common Issues:
+### 2.) Common Issues:
 - Database Connection Failures: Check environment variable settings and ensure the MySQL server is running.
 - Input Validation Errors: Ensure dates, emails, zip codes, and phone numbers are formatted correctly.
 
-### 7.3 Troubleshooting Tips:
+### 3.) Troubleshooting Tips:
 - Review the log file for error details.
 - Re-run the SQL script if tables or relationships appear to be missing.
 
