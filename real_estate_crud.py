@@ -17,7 +17,7 @@ def connect_db():
         conn = mysql.connector.connect(
             host="localhost",  # Change this if the database is hosted elsewhere
             user="root",  # Replace with your MySQL username
-            password="Macbook312",  # Replace with your MySQL password
+            password="your_database_password",  # Replace with your MySQL password
             database="RealEstateDB"  # The name of the database
         )
         if conn.is_connected():
