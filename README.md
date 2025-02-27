@@ -3,31 +3,23 @@
 ## Overview
 
 ## Purpose
+This Real Estate Property Management CRUD Application is designed to help property managers, landlords, and real estate professionals efficiently manage rental properties, tenants, leases, maintenance requests, and payments. It provides a command-line interface (CLI) for interacting with a MySQL database, enabling users to add, retrieve, update, and delete records related to real estate management.
 
-The Real Estate Property Management Command Line Interface (CLI) is designed to help manage a real estate property management system by allowing users to perform CRUD (Create, Read, Update, Delete) operations on property and owner records. This tool allows real estate administrators to efficiently handle property listings and owner information, providing a simple, interactive way to manage the database.
-
-## Application Scope
-- Manage property listings: Includes details such as address, type, purchase details, etc.
-- Manage owner records: Stores personal and contact information for owners.
-- Handle relationships between properties and owners: Each property may have one or more owners.
-
-## Features
-
-Property Management:
-- Create: Add new property records with validation (e.g., date format, ZIP code, property type).
-- Read: Display properties in a formatted table.
-- Update: Modify property details interactively.
-- Delete: Remove property records with confirmation and error handling.
-
-Owner Management:
-- Create: Add new owner records with validation (e.g., email, phone number format).
-- Read: View owner records with pagination support.
-- Update: Update owner information interactively.
-- Delete: Delete owner records after confirming no properties are associated with them.
-
-Logging & Error Handling:
-- Error Logging: Logs errors to a file (e.g., database.log).
-- User Prompts: Provides informative prompts and error messages to guide the user through each operation.
+## Key Functionalities:
+1. Property Management:
+	- Store and manage details of properties, including address, type, square footage, and ownership.
+2. Tenant & Lease Management:
+	- Add and update tenant information.
+	- Track lease agreements, including rental terms, security deposits, and lease status.
+3. Payment Processing:
+	- Log rental payments from tenants.
+	- Record audit history for payment tracking.
+4. Maintenance Requests:
+	- Allow tenants to submit maintenance requests.
+	- Assign employees to handle requests and track completion status.
+5.	Database Connectivity & Logging:
+	- Secure MySQL database connection with retry logic.
+	- Error logging for better issue tracking.
 
 ## Database Structure
 
