@@ -39,54 +39,54 @@ The database consists of nine tables, each serving a specific role in property m
 
 1. Property Table
 - Stores details of real estate properties.
-- Key attributes: property_id, address, city, state, zip_code, property_type, square_feet, year_built, purchase_date, purchase_price.
+- Key attributes: `property_id`, `address`, `city`, `state`, `zip_code`, `property_type`, `square_feet`, `year_built`, `purchase_date`, `purchase_price`.
 
 2. Owner Table
 - Holds property owner details.
-- Key attributes: owner_id, first_name, last_name, email, phone, mailing_address.
+- Key attributes: `owner_id`, `first_name`, `last_name`, `email`, `phone`, `mailing_address`.
 
 3. Tenant Table
 - Contains tenant information.
-- Key attributes: tenant_id, first_name, last_name, email, phone, employer, emergency_contact.
+- Key attributes: `tenant_id`, `first_name`, `last_name`, `email`, `phone`, `employer`, `emergency_contact`.
 
 4. Employee Table
 - Stores details of employees managing properties.
-- Key attributes: employee_id, first_name, last_name, email, phone, role, hire_date.
+- Key attributes: `employee_id`, `first_name`, `last_name`, `email`, `phone`, `role`, `hire_date`.
 
 5. Lease Table
 - Manages lease agreements between tenants and properties.
-- Key attributes: lease_id, property_id (FK), tenant_id (FK), start_date, end_date, monthly_rent, security_deposit, lease_status, due_day.
+- Key attributes: `lease_id`, `property_id` (FK), `tenant_id` (FK), `start_date`, `end_date`, `monthly_rent`, `security_deposit`, `lease_status`, `due_day`.
 - Foreign Keys:
-	- property_id → Property(property_id) (Deletes lease if property is removed).
-	- tenant_id → Tenant(tenant_id) (Deletes lease if tenant is removed).
+	- `property_id` → Property(`property_id`) (Deletes lease if property is removed).
+	- `tenant_id` → Tenant(`tenant_id`) (Deletes lease if tenant is removed).
 
 6. MaintenanceRequest Table
 - Tracks property maintenance requests.
-- Key attributes: request_id, property_id (FK), tenant_id (FK), employee_id (FK), description, request_date, completion_date, status, cost.
+- Key attributes: `request_id`, `property_id` (FK), `tenant_id` (FK), `employee_id` (FK), `description`, `request_date`, `completion_date`, `status`, `cost`.
 - Foreign Keys:
-	- property_id → Property(property_id) (Deletes request if property is removed).
-	- tenant_id → Tenant(tenant_id) (Sets NULL if tenant is removed).
-	- employee_id → Employee(employee_id) (Sets NULL if employee is removed).
+	- `property_id` → Property(`property_id`) (Deletes request if property is removed).
+	- `tenant_id` → Tenant(`tenant_id`) (Sets NULL if tenant is removed).
+	- `employee_id` → Employee(`employee_id`) (Sets NULL if employee is removed).
 
 7. Payment Table
 - Stores rental payments made by tenants.
-- Key attributes: payment_id, lease_id (FK), amount, payment_date, payment_method, received_by (FK).
+- Key attributes: `payment_id`, `lease_id` (FK), `amount`, `payment_date`, `payment_method`, `received_by` (FK).
 - Foreign Keys:
-	- lease_id → Lease(lease_id) (Deletes payment if lease is removed).
-	- received_by → Employee(employee_id) (Sets NULL if employee is removed).
+	- `lease_id` → Lease(`lease_id`) (Deletes payment if lease is removed).
+	- `received_by` → Employee(`employee_id`) (Sets NULL if employee is removed).
 
 8. PropertyOwner Table
 - Establishes ownership relationships between properties and owners.
-- Key attributes: property_id (FK), owner_id (FK), ownership_percentage.
+- Key attributes: `property_id` (FK), `owner_id` (FK), `ownership_percentage`.
 - Foreign Keys:
-	- property_id → Property(property_id) (Deletes record if property is removed).
-	- owner_id → Owner(owner_id) (Deletes record if owner is removed).
+	- `property_id` → Property(`property_id`) (Deletes record if property is removed).
+	- `owner_id` → Owner(`owner_id`) (Deletes record if owner is removed).
 
 9. PaymentAudit Table
 - Logs audits of rental payments.
-- Key attributes: audit_id, payment_id (FK), late_fee, audit_timestamp.
+- Key attributes: `audit_id`, `payment_id` (FK), `late_fee`, `audit_timestamp`.
 - Foreign Key:
-	- payment_id → Payment(payment_id)
+	- `payment_id` → Payment(`payment_id`)
 
 ## Key Features & Relationships
 - Property-Tenant-Lease: A Tenant can lease a Property, and this relationship is stored in the Lease table.
