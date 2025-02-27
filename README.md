@@ -108,7 +108,7 @@ Ensure the following Python packages are installed:
 ### 2.) Database Setup
 
 Run the SQL Script:
-1. Locate the provided SQL file (e.g., Deliverable_2.sql).
+1. Locate the provided SQL file (e.g., RealEstateDB.sql).
 2. Use your MySQL client (or MySQL Workbench) to run the script, which will create the RealEstateDB database and necessary tables.
 
 Verify Database:
