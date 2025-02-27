@@ -108,32 +108,29 @@ Ensure the following Python packages are installed:
 ### 4.2 Database Setup
 
 Run the SQL Script:
-	1.	Locate the provided SQL file (e.g., Deliverable_2.sql).
-	2.	Use your MySQL client (or MySQL Workbench) to run the script, which will create the RealEstateDB database and necessary tables.
+1. Locate the provided SQL file (e.g., Deliverable_2.sql).
+2. Use your MySQL client (or MySQL Workbench) to run the script, which will create the RealEstateDB database and necessary tables.
 
 Verify Database:
-	•	Confirm that the tables (Property, Owner, PropertyOwner) have been created with the expected columns and relationships.
+- Confirm that the tables have been created with the expected columns and relationships.
 
-### 4.3 Environment Variables
-
-Configuration:
-
+### 4.3 Configure Database Credentials
 Set up the following environment variables to enable the CLI to connect to the database:
-	•	DB_HOST (default: localhost)
-	•	DB_USER (default: root)
-	•	DB_PASSWORD (default: your password)
-	•	DB_NAME (default: RealEstateDB)
+- DB_HOST (default: localhost)
+- DB_USER (default: root)
+- DB_PASSWORD (default: your password)
+- DB_NAME (default: RealEstateDB)
 
 
 ### 4.4 Installing Dependencies
 
 Use pip to install the required dependencies:
 
-pip install mysql-connector-python tabulate pytest
+pip install mysql-connector-python tabulate
 
 ## Usage
 
-5.1 Running the CLI
+### 5.1 Running the CLI
 
 Start the Application:
 
@@ -141,52 +138,54 @@ Run the Python script (e.g., real_estate_crud.py) from the command line:
 
 python real_estate_crud.py
 
+This will establish a connection with the database and allow you to perform CRUD operations via the command-line interface.
+
 User Prompts:
 
 The CLI will prompt you for input to perform various actions, such as adding a property or updating an owner.
 
-5.2 Commands / Operations
+### 5.2 Commands / Operations
 
 Property Operations:
-	•	Create: Enter property details such as address, city, state, zip code, and property type. Optional fields include square feet, year built, purchase date, and purchase price.
-	•	Read: Display all property listings in a formatted table.
-	•	Update: Select a property by ID, choose which fields to update, and enter new values.
-	•	Delete: Enter the property ID to delete, with confirmation prompts.
+- Create: Enter property details such as address, city, state, zip code, and property type. Optional fields include square feet, year built, purchase date, and purchase price.
+- Read: Display all property listings in a formatted table.
+- Update: Select a property by ID, choose which fields to update, and enter new values.
+- Delete: Enter the property ID to delete, with confirmation prompts.
 
 Owner Operations:
-	•	Create: Enter owner details, including first name, last name, email, phone (optional), and mailing address.
-	•	Read: List all owners with pagination.
-	•	Update: Select an owner by ID, choose fields to update, and provide new values.
-	•	Delete: Remove an owner record after confirming that no properties are associated with the owner.
+- Create: Enter owner details, including first name, last name, email, phone (optional), and mailing address.
+- Read: List all owners with pagination.
+- Update: Select an owner by ID, choose fields to update, and provide new values.
+- Delete: Remove an owner record after confirming that no properties are associated with the owner.
 
-5.3 Example Walkthrough
+### 5.3 Example Walkthrough
 
 Adding a Property:
-	1.	Launch the CLI.
-	2.	Select “Create Property” and follow the prompts to enter property details.
+1. Launch the CLI.
+2. Select “Create Property” and follow the prompts to enter property details.
 
 Updating an Owner:
-	1.	Select the owner to update.
-	2.	Choose the email field and enter a new valid email.
+1. Select the owner to update.
+2. Choose the email field and enter a new valid email.
 
 Deleting a Property/Owner:
-	1.	Select the property or owner to delete.
-	2.	Follow the confirmation prompts to ensure accidental deletions are avoided.
+1. Select the property or owner to delete.
+2. Follow the confirmation prompts to ensure accidental deletions are avoided.
 
 ## Logging and Troubleshooting
 
-7.1 Logging:
-	•	All errors are logged to database.log.
+### 7.1 Logging:
+- All errors are logged to database.log.
 
-7.2 Common Issues:
-	•	Database Connection Failures: Check environment variable settings and ensure the MySQL server is running.
-	•	Input Validation Errors: Ensure dates, emails, zip codes, and phone numbers are formatted correctly.
+### 7.2 Common Issues:
+- Database Connection Failures: Check environment variable settings and ensure the MySQL server is running.
+- Input Validation Errors: Ensure dates, emails, zip codes, and phone numbers are formatted correctly.
 
-7.3 Troubleshooting Tips:
-	•	Review the log file for error details.
-	•	Re-run the SQL script if tables or relationships appear to be missing.
+### 7.3 Troubleshooting Tips:
+- Review the log file for error details.
+- Re-run the SQL script if tables or relationships appear to be missing.
 
 ## Future Enhancements
-•	Additional features like lease management and reporting.
-•	Improved error handling and user experience.
-•	Integration with web-based interfaces for broader accessibility.
+- Additional features like lease management and reporting.
+- Improved error handling and user experience.
+- Integration with web-based interfaces for broader accessibility.
