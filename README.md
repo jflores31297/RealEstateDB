@@ -88,21 +88,24 @@ The database consists of nine tables, each serving a specific role in property m
 
 ## Installation & Setup
 
-4.1 Prerequisites
+### 4.1 Prerequisites
+Before setting up the Real Estate Property Management CRUD Application, ensure that your system meets the following requirements:
 
-Software Requirements:
-	•	Python 3.7+
-	•	MySQL Server
+1. Software Requirements
+	- Python 3.8+ – The application is built using Python, so you need a compatible version installed.
+	- MySQL Server – The application interacts with a MySQL database, so a running MySQL instance is required.
+	- pip (Python Package Installer) – Required to install dependencies.
 
-Python Dependencies:
-	•	mysql-connector-python (for database connectivity)
-	•	tabulate (for formatting tables in the CLI)
-	•	pytest (for running tests)
+2. Required Python Packages
 
-Other Standard Libraries:
-	•	logging, os, datetime, etc.
+Ensure the following Python packages are installed:
+	- mysql-connector-python – For MySQL database interaction.
+	- tabulate – For displaying query results in a table format.
+	- logging – (Built-in) For error logging and debugging.
+	- datetime – (Built-in) For managing timestamps.
+	- os – (Built-in) For fetching environment variables.
 
-4.2 Database Setup
+### 4.2 Database Setup
 
 Run the SQL Script:
 	1.	Locate the provided SQL file (e.g., Deliverable_2.sql).
@@ -111,7 +114,7 @@ Run the SQL Script:
 Verify Database:
 	•	Confirm that the tables (Property, Owner, PropertyOwner) have been created with the expected columns and relationships.
 
-4.3 Environment Variables
+### 4.3 Environment Variables
 
 Configuration:
 
@@ -121,16 +124,8 @@ Set up the following environment variables to enable the CLI to connect to the d
 	•	DB_PASSWORD (default: your password)
 	•	DB_NAME (default: RealEstateDB)
 
-Example Setup:
 
-For Unix-like systems, add the following to your shell configuration or export them in the terminal:
-
-export DB_HOST=localhost
-export DB_USER=root
-export DB_PASSWORD=your_password
-export DB_NAME=RealEstateDB
-
-4.4 Installing Dependencies
+### 4.4 Installing Dependencies
 
 Use pip to install the required dependencies:
 
