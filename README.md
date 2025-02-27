@@ -80,7 +80,7 @@ The database consists of nine tables, each serving a specific role in property m
 - Foreign Key:
 	- `payment_id` → Payment(`payment_id`)
 
-## Key Features & Relationships
+### Key Features & Relationships
 - Property-Tenant-Lease: A Tenant can lease a Property, and this relationship is stored in the Lease table.
 - Property-Owner: Multiple Owners can own a property, and ownership percentages are recorded in the PropertyOwner table.
 - Maintenance & Employees: Employees handle maintenance requests assigned to them.
