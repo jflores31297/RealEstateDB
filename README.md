@@ -29,7 +29,6 @@ Logging & Error Handling:
 - Error Logging: Logs errors to a file (e.g., database.log).
 - User Prompts: Provides informative prompts and error messages to guide the user through each operation.
 
----
 ## Database Structure
 
 ### Database Name:
@@ -95,7 +94,6 @@ The database consists of nine tables, each serving a specific role in property m
 - Maintenance & Employees: Employees handle maintenance requests assigned to them.
 - Payments & Audits: Tenants make payments, which are audited for late fees.
 
----
 ## Installation & Setup
 
 4.1 Prerequisites
