@@ -27,10 +27,10 @@ def connect_db(retries=3, delay=5):
         try:
             # Fetch database credentials from environment variables with defaults
             db_config = {
-                'host': os.getenv('DB_HOST', 'localhost'),  # Default to localhost if not set
-                'user': os.getenv('DB_USER', 'root'),  # Default username is 'root'
-                'password': os.getenv('DB_PASSWORD', 'Macbook312'),  # Default password
-                'database': os.getenv('DB_NAME', 'RealEstateDB'),  # Default database name
+                'host': os.getenv('DB_HOST'),  # Default to localhost if not set
+                'user': os.getenv('DB_USER'),  # Default username 
+                'password': os.getenv('DB_PASSWORD'),  # Default password
+                'database': os.getenv('DB_NAME'),  # Default database name
                 'connect_timeout': 10  # Timeout if connection takes more than 10 seconds
             }
 
