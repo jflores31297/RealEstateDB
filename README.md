@@ -7,51 +7,49 @@
 The Real Estate Property Management Command Line Interface (CLI) is designed to help manage a real estate property management system by allowing users to perform CRUD (Create, Read, Update, Delete) operations on property and owner records. This tool allows real estate administrators to efficiently handle property listings and owner information, providing a simple, interactive way to manage the database.
 
 ## Application Scope
-•	Manage property listings: Includes details such as address, type, purchase details, etc.
-•	Manage owner records: Stores personal and contact information for owners.
-•	Handle relationships between properties and owners: Each property may have one or more owners.
+- Manage property listings: Includes details such as address, type, purchase details, etc.
+- Manage owner records: Stores personal and contact information for owners.
+- Handle relationships between properties and owners: Each property may have one or more owners.
 
 ## Features
 
 Property Management:
-	•	Create: Add new property records with validation (e.g., date format, ZIP code, property type).
-	•	Read: Display properties in a formatted table.
-	•	Update: Modify property details interactively.
-	•	Delete: Remove property records with confirmation and error handling.
+- Create: Add new property records with validation (e.g., date format, ZIP code, property type).
+- Read: Display properties in a formatted table.
+- Update: Modify property details interactively.
+- Delete: Remove property records with confirmation and error handling.
 
 Owner Management:
-	•	Create: Add new owner records with validation (e.g., email, phone number format).
-	•	Read: View owner records with pagination support.
-	•	Update: Update owner information interactively.
-	•	Delete: Delete owner records after confirming no properties are associated with them.
+- Create: Add new owner records with validation (e.g., email, phone number format).
+- Read: View owner records with pagination support.
+- Update: Update owner information interactively.
+- Delete: Delete owner records after confirming no properties are associated with them.
 
 Logging & Error Handling:
-	•	Error Logging: Logs errors to a file (e.g., database.log).
-	•	User Prompts: Provides informative prompts and error messages to guide the user through each operation.
+- Error Logging: Logs errors to a file (e.g., database.log).
+- User Prompts: Provides informative prompts and error messages to guide the user through each operation.
 
-Test Coverage:
-	•	Unit Tests: Test major functionalities using pytest to ensure all features are working correctly.
 
 ## Database Structure
 
 ### Database Name:
-•	RealEstateDB (default)
+- RealEstateDB (default)
 
 ### Main Tables:
 
 Property Table:
-	•	Columns:
-	•	property_id (primary key)
-	•	address
-	•	city
-	•	state
-	•	zip_code
-	•	property_type
-	•	square_feet
-	•	year_built
-	•	purchase_date
-	•	purchase_price
-	•	Purpose: Stores all property details.
+- Columns:
+	- property_id (primary key)
+	- address
+	- city
+	- state
+	- zip_code
+	- property_type
+	- square_feet
+	- year_built
+	- purchase_date
+	- purchase_price
+	- Purpose: Stores all property details.
 
 Owner Table:
 	•	Columns:
