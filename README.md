@@ -158,7 +158,7 @@ Owner Operations:
 - Update: Select an owner by ID, choose fields to update, and provide new values.
 - Delete: Remove an owner record after confirming that no properties are associated with the owner.
 
-### 3.) Example Walkthrough
+### 3.) [Example Walkthrough](https://www.loom.com/share/f82c02702b344e7ca52bc4798e7421ff?sid=48414b6f-3f69-4d19-a24c-4ee4b39b280c)
 
 Adding a Property:
 1. Launch the CLI.
