@@ -27,10 +27,10 @@ def connect_db(retries=3, delay=5):
         try:
             # Fetch database credentials from environment variables with defaults
             db_config = {
-                'host': os.getenv('DB_HOST'),  # Default to localhost if not set
-                'user': os.getenv('DB_USER'),  # Default username 
-                'password': os.getenv('DB_PASSWORD'),  # Default password
-                'database': os.getenv('DB_NAME'),  # Default database name
+                'host': os.getenv('DB_HOST', 'localhost'),  # Default to localhost if not set
+                'user': os.getenv('DB_USER', 'root'),  # Default username is 'root'
+                'password': os.getenv('DB_PASSWORD', 'Macbook312'),  # Default password
+                'database': os.getenv('DB_NAME', 'RealEstateDB'),  # Default database name
                 'connect_timeout': 10  # Timeout if connection takes more than 10 seconds
             }
 
@@ -2739,6 +2739,350 @@ def delete_property_owner(cursor):
         print(f"An unexpected error occurred: {e}")
 
 
+# Complex Query 1:
+def get_oldest_open_maintenance_requests(conn, page_size=5):
+    """
+    Fetches and displays the oldest open maintenance request for each property with pagination.
+
+    :param conn: Active MySQL connection object.
+    :param page_size: Number of records per page (default is 5).
+    """
+    query = """
+    WITH RankedRequests AS (
+        SELECT
+            property_id,
+            request_id,
+            description,
+            request_date,
+            ROW_NUMBER() OVER (
+                PARTITION BY property_id
+                ORDER BY request_date
+            ) AS request_rank
+        FROM MaintenanceRequest
+        WHERE status = 'Open'
+    )
+    SELECT * FROM RankedRequests WHERE request_rank = 1
+    LIMIT %s OFFSET %s;
+    """
+
+    try:
+        cursor = conn.cursor(dictionary=True)  # Use dictionary format for readability
+        page = 0  # Start at the first page
+
+        while True:
+            offset = page * page_size
+            cursor.execute(query, (page_size, offset))
+            results = cursor.fetchall()
+
+            if not results and page == 0:
+                print("\n✅ No open maintenance requests found.")
+                break
+
+            if not results:
+                print("\n⚠️ No more records available.")
+                page -= 1  # Prevent going beyond available pages
+                continue
+
+            print(f"\n📌 Oldest Open Maintenance Requests Per Property (Page {page + 1}):\n")
+            for row in results:
+                print(f"🏠 Property ID: {row['property_id']}")
+                print(f"🔧 Request ID: {row['request_id']}")
+                print(f"📝 Description: {row['description']}")
+                print(f"📅 Request Date: {row['request_date']}")
+                print("-" * 40)
+
+            # Pagination options
+            print("\n📖 Navigation: [N] Next Page | [P] Previous Page | [Q] Quit")
+            choice = input("Select an option: ").strip().lower()
+
+            if choice == "n":
+                page += 1
+            elif choice == "p" and page > 0:
+                page -= 1
+            elif choice == "q":
+                print("Returning to Advanced Queries menu...")
+                break
+            else:
+                print("❌ Invalid option. Please try again.")
+
+    except mysql.connector.Error as err:
+        print(f"❌ Database Error: {err}")
+
+    finally:
+        cursor.close()
+
+
+# Complex Query 2:
+def track_tenant_payment_running_total(conn, page_size=5):
+    """
+    Retrieves and displays the running total of tenant payments over time with pagination.
+
+    :param conn: Database connection object.
+    :param page_size: Number of records per page (default is 5).
+    """
+    query = """
+    SELECT
+      t.tenant_id,
+      CONCAT(t.first_name, ' ', t.last_name) AS tenant_name,
+      p.payment_date,
+      p.amount,
+      SUM(p.amount) OVER (
+        PARTITION BY t.tenant_id
+        ORDER BY p.payment_date
+      ) AS running_total_paid
+    FROM Payment p
+    JOIN Lease l ON p.lease_id = l.lease_id
+    JOIN Tenant t ON l.tenant_id = t.tenant_id
+    LIMIT %s OFFSET %s;
+    """
+
+    try:
+        cursor = conn.cursor()
+        page = 0  # Start at the first page
+
+        while True:
+            offset = page * page_size
+            cursor.execute(query, (page_size, offset))
+            results = cursor.fetchall()
+
+            if not results and page == 0:
+                print("\n✅ No payment records found.")
+                break
+
+            if not results:
+                print("\n⚠️ No more records available.")
+                page -= 1  # Prevents moving beyond available pages
+                continue
+
+            print(f"\n📌 Running Total of Tenant Payments (Page {page + 1}):")
+            print("Tenant ID | Tenant Name          | Payment Date | Amount  | Running Total Paid")
+            print("-" * 80)
+
+            for row in results:
+                print(f"{row[0]:<10} | {row[1]:<20} | {row[2]} | ${row[3]:>7.2f} | ${row[4]:>7.2f}")
+
+            # Pagination options
+            print("\n📖 Navigation: [N] Next Page | [P] Previous Page | [Q] Quit")
+            choice = input("Select an option: ").strip().lower()
+
+            if choice == "n":
+                page += 1
+            elif choice == "p" and page > 0:
+                page -= 1
+            elif choice == "q":
+                print("Returning to Advanced Queries menu...")
+                break
+            else:
+                print("❌ Invalid option. Please try again.")
+
+    except mysql.connector.Error as e:
+        print(f"❌ Database error: {e}")
+
+    finally:
+        cursor.close()
+
+# Complex Query 3:
+def calculate_annual_rent_yield(conn, page_size=5):
+    """
+    Retrieves and displays the annual rent yield for each property with pagination.
+
+    :param conn: Database connection object.
+    :param page_size: Number of records per page (default is 5).
+    """
+    query = """
+    SELECT
+      p.address,
+      p.purchase_price,
+      SUM(l.monthly_rent * 12) AS annual_rent,
+      ROUND((SUM(l.monthly_rent * 12) / p.purchase_price) * 100, 2) AS rent_yield_percent
+    FROM Lease l
+    JOIN Property p ON l.property_id = p.property_id
+    WHERE l.lease_status = 'Active'
+    GROUP BY p.property_id, p.address, p.purchase_price
+    LIMIT %s OFFSET %s;
+    """
+
+    try:
+        cursor = conn.cursor()
+        page = 0  # Start at page 0
+
+        while True:
+            offset = page * page_size
+            cursor.execute(query, (page_size, offset))
+            results = cursor.fetchall()
+
+            if not results and page == 0:
+                print("\n✅ No active lease records found.")
+                break
+
+            if not results:
+                print("\n⚠️ No more records available.")
+                page -= 1  # Prevents moving beyond available pages
+                continue
+
+            print(f"\n🏠 Annual Rent Yield for Each Property (Page {page + 1}):")
+            print("Address                        | Purchase Price | Annual Rent | Rent Yield (%)")
+            print("-" * 90)
+
+            for row in results:
+                print(f"{row[0]:<30} | ${row[1]:>12,.2f} | ${row[2]:>10,.2f} | {row[3]:>10.2f}%")
+
+            # Pagination options
+            print("\n📖 Navigation: [N] Next Page | [P] Previous Page | [Q] Quit")
+            choice = input("Select an option: ").strip().lower()
+
+            if choice == "n":
+                page += 1
+            elif choice == "p" and page > 0:
+                page -= 1
+            elif choice == "q":
+                print("Returning to Advanced Queries menu...")
+                break
+            else:
+                print("❌ Invalid option. Please try again.")
+
+    except mysql.connector.Error as e:
+        print(f"❌ Database error: {e}")
+
+    finally:
+        cursor.close()
+
+
+# Complex Query 4:
+def rank_properties_by_open_requests(conn, page_size=5):
+    """
+    Retrieves and displays properties ranked by the number of open maintenance requests with pagination.
+
+    :param conn: Database connection object.
+    :param page_size: Number of records per page (default is 5).
+    """
+    query = """
+    WITH RankedRequests AS (
+        SELECT
+            p.address,
+            COUNT(mr.request_id) AS open_requests,
+            RANK() OVER (ORDER BY COUNT(mr.request_id) DESC) AS request_rank
+        FROM MaintenanceRequest mr
+        JOIN Property p ON mr.property_id = p.property_id
+        WHERE mr.status = 'Open'
+        GROUP BY p.property_id, p.address
+    )
+    SELECT * FROM RankedRequests LIMIT %s OFFSET %s;
+    """
+
+    try:
+        cursor = conn.cursor()
+        page = 0  # Start at page 0
+
+        while True:
+            offset = page * page_size
+            cursor.execute(query, (page_size, offset))
+            results = cursor.fetchall()
+
+            if not results and page == 0:
+                print("\n✅ No open maintenance requests found.")
+                break
+
+            if not results:
+                print("\n⚠️ No more records available.")
+                page -= 1  # Prevents moving beyond available pages
+                continue
+
+            print(f"\n🏠 Properties Ranked by Open Maintenance Requests (Page {page + 1}):")
+            print("Rank | Address                        | Open Requests")
+            print("-" * 70)
+
+            for row in results:
+                print(f"{row[2]:<4} | {row[0]:<30} | {row[1]:>5}")
+
+            # Pagination options
+            print("\n📖 Navigation: [N] Next Page | [P] Previous Page | [Q] Quit")
+            choice = input("Select an option: ").strip().lower()
+
+            if choice == "n":
+                page += 1
+            elif choice == "p" and page > 0:
+                page -= 1
+            elif choice == "q":
+                print("Returning to Advanced Queries menu...")
+                break
+            else:
+                print("❌ Invalid option. Please try again.")
+
+    except mysql.connector.Error as e:
+        print(f"❌ Database error: {e}")
+
+    finally:
+        cursor.close()
+
+
+# Complex Query 5:
+def calculate_owner_portfolio_value(conn, page_size=5):
+    """
+    Retrieves and displays each owner's total portfolio value with pagination.
+
+    :param conn: Database connection object.
+    :param page_size: Number of records per page (default is 5).
+    """
+    query = """
+    SELECT
+        o.owner_id,
+        CONCAT(o.first_name, ' ', o.last_name) AS owner_name,
+        SUM(p.purchase_price * (po.ownership_percentage / 100)) AS portfolio_value
+    FROM PropertyOwner po
+    JOIN Owner o ON po.owner_id = o.owner_id
+    JOIN Property p ON po.property_id = p.property_id
+    GROUP BY o.owner_id
+    ORDER BY portfolio_value DESC
+    LIMIT %s OFFSET %s;
+    """
+
+    try:
+        cursor = conn.cursor()
+        page = 0  # Start at page 0
+
+        while True:
+            offset = page * page_size
+            cursor.execute(query, (page_size, offset))
+            results = cursor.fetchall()
+
+            if not results and page == 0:
+                print("\n✅ No owner portfolio data available.")
+                break
+
+            if not results:
+                print("\n⚠️ No more records available.")
+                page -= 1  # Prevents moving beyond available pages
+                continue
+
+            print(f"\n🏠 Owner Portfolio Values (Page {page + 1}):")
+            print("Owner ID | Owner Name          | Portfolio Value ($)")
+            print("-" * 60)
+
+            for row in results:
+                print(f"{row[0]:<8} | {row[1]:<20} | ${row[2]:,.2f}")
+
+            # Pagination options
+            print("\n📖 Navigation: [N] Next Page | [P] Previous Page | [Q] Quit")
+            choice = input("Select an option: ").strip().lower()
+
+            if choice == "n":
+                page += 1
+            elif choice == "p" and page > 0:
+                page -= 1
+            elif choice == "q":
+                print("Returning to Advanced Queries menu...")
+                break
+            else:
+                print("❌ Invalid option. Please try again.")
+
+    except mysql.connector.Error as e:
+        print(f"❌ Database error: {e}")
+
+    finally:
+        cursor.close()
+
+
 # Function to manage CRUD operations for different tables dynamically
 def manage_table(table_name):
     """
@@ -2844,15 +3188,48 @@ def manage_table(table_name):
     conn.close()  # Ensure the connection to the database is properly closed
 
 
+def advanced_queries_menu(conn):
+    """
+    Displays a submenu for executing advanced SQL queries.
+    :param conn: Database connection object
+    """
+
+    while True:
+        print("\n📊 Advanced Queries")
+        print("1️⃣ View Oldest Open Maintenance Requests Per Property")
+        print("2️⃣ Rank Properties by Number of Open Maintenance Requests")
+        print("3️⃣ Track Running Total of Tenant Payments")
+        print("4️⃣ Calculate Annual Rent Yield for Each Property")
+        print("5️⃣ Calculate Each Owner's Total Portfolio Value")
+        print("6️⃣ Return to Main Menu")
+
+        choice = input("Select an option: ").strip()
+
+        if choice == "1":
+            get_oldest_open_maintenance_requests(conn)
+        elif choice == "2":
+            rank_properties_by_open_requests(conn)
+        elif choice == "3":
+            track_tenant_payment_running_total(conn)
+        elif choice == "4":
+            calculate_annual_rent_yield(conn)
+        elif choice == "5":
+            calculate_owner_portfolio_value(conn)
+        elif choice == "6":
+            print("Returning to main menu...")
+            break
+        else:
+            print("❌ Invalid option. Please select again.")
+
+
 # Main function that provides a menu for managing different database tables
 def main():
     """
     Main function that provides a menu for managing different database tables.
-    The user can select a table and perform CRUD operations on it.
+    The user can select a table, perform CRUD operations, or run advanced queries.
     """
 
     # Dictionary mapping menu options to table names
-    # This allows the program to display the options dynamically and handle different tables
     menu_options = {
         "1": "Property",
         "2": "Owner",
@@ -2860,43 +3237,42 @@ def main():
         "4": "Lease",
         "5": "MaintenanceRequest",
         "6": "Payment",
-        "7": "Employee",  # Added Employee table
-        "8": "PropertyOwner",  # Added PropertyOwner table
-        "9": "Exit",  # Moved Exit to option 9
+        "7": "Employee",
+        "8": "PropertyOwner",
+        "9": "Advanced Queries",  # Added Advanced Queries submenu
+        "10": "Exit",
     }
 
-    # Infinite loop for displaying the menu and handling user input
     while True:
-        # Display the title of the application
-        print("\nReal Estate Property Management CLI")
-        print("Select which table to manage:")
+        print("\n🏠 Real Estate Property Management CLI")
+        print("Select which table to manage or run advanced queries:")
 
-        # Dynamically display the menu options based on the `menu_options` dictionary
         for key, value in menu_options.items():
-            print(f"{key}. {value}")  # Print the key-value pair as a menu item
+            print(f"{key}. {value}")
 
-        # Get the user's input choice from the menu
         choice = input("Select an option: ").strip()
 
-        # If the user selects option 9, prompt to confirm exiting the application
-        if choice == "9":  # Exit option (updated to 9)
+        if choice == "10":  # Exit option
             confirm = input("Are you sure you want to exit? (yes/no): ").strip().lower()
             if confirm == "yes":
-                print("Exiting...")  # Exit message
-                break  # Exit the loop and terminate the program
+                print("Exiting...")
+                break
             else:
-                print("Returning to main menu.")  # If user doesn't confirm, return to the menu
-                continue  # Continue the loop and redisplay the menu
+                print("Returning to main menu.")
+                continue
+        elif choice == "9":  # Advanced Queries submenu
+            conn = connect_db()  # Ensure the database connection is established
+            if conn:
+                advanced_queries_menu(conn)
+            else:
+                print("⚠️ Unable to connect to the database. Returning to main menu.")
 
-        # Retrieve the table name based on the user's choice from the dictionary
-        table_name = menu_options.get(choice)
-
-        # If a valid table name is retrieved, manage the selected table
-        if table_name:
-            manage_table(table_name)  # Call the function to manage the selected table
         else:
-            # If the choice is invalid, inform the user
-            print("Invalid choice! Please select a valid option.")
+            table_name = menu_options.get(choice)
+            if table_name:
+                manage_table(table_name)
+            else:
+                print("❌ Invalid choice! Please select a valid option.")
 
 
 # Entry point of the script - Runs the main function when the script is executed
