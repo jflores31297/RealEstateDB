@@ -3,6 +3,8 @@
 # Real Estate Management CLI with Advanced Analytics
 *Python + MySQL | Terminal-Based Property Management System*
 
+## Live Demo
+[▶️ Watch Demo Video] 
 ---
 
 ### **Overview**
