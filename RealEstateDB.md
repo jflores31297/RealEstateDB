@@ -1,3 +1,5 @@
+<img src="https://github.com/jflores31297/portfolio/blob/main/assets/RealEstateDB-Cover.png?raw=true" width="900">
+
 # Real Estate Management CLI with Advanced Analytics
 *Python + MySQL | Terminal-Based Property Management System*
 
