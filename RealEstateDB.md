@@ -46,7 +46,7 @@ A command-line interface (CLI) tool for managing real estate portfolios, featuri
 
 ### **2. Advanced Analytics Submenu**
 
-- **5 Key Queries** (with business impact explained):
+- **5 Key Queries** (with easy expandability):
     - **Oldest Open Maintenance Requests**: Prioritize urgent repairs.
     - **Running Payment Totals**: Track tenant payment history.
     - **Rent Yield Calculation**: Evaluate ROI per property.
@@ -129,10 +129,3 @@ mysql -u root -p < PropertyManagementDB.sql
 python real_estate_crud.py
 
 ```
-
----
-
-### **Why This Matters**
-
-- **Impact**: Demonstrates your ability to bridge database design, Python scripting, and real-world business logic.
-- **Skills Highlighted**: SQL optimization, OOP, UX design for CLI tools, modular architecture.
